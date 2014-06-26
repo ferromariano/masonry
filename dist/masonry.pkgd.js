@@ -2733,7 +2733,17 @@ function masonryDefinition( Outlayer, getSize ) {
     this.getContainerWidth();
     // if columnWidth is 0, default to outerWidth of first item
     if ( !this.columnWidth ) {
-      var firstItem = this.items[0];
+      for (key in this.items) {
+          if (this.items.hasOwnProperty(key)  &&        // These are explained
+              /^0$|^[1-9]\d*$/.test(key) &&    // and then hidden
+              key <= 4294967294                // away below
+              ) {
+              if( getSize( this.items[key].element ).outerWidth > 0 ) {
+                var firstItem = this.items[key];
+                break;
+              }
+          }
+      }
       var firstItemElem = firstItem && firstItem.element;
       // columnWidth fall back to item of first element
       this.columnWidth = firstItemElem && getSize( firstItemElem ).outerWidth ||
